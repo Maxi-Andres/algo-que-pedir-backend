@@ -1,41 +1,105 @@
-# Ejemplo base para TP Algo3
+# Algo que Pedir — Backend
 
 [![Build](https://github.com/algo3-unsam/proyecto-base-tp/actions/workflows/build.yml/badge.svg)](https://github.com/algo3-unsam/tp-recetas-2020-gr-xx/actions/workflows/build.yml) ![Coverage](./.github/badges/jacoco.svg)
 
-- El build de Github Actions funciona de una, no tenés que configurar nada
-- También el coverage se genera solito si respetás las dependencias que están en el `build.gradle.kts`
-- en el archivo [settings.gradle.kts](./settings.gradle.kts) que está en el raíz tenés que cambiarle al nombre de tu proyecto
+Este proyecto corresponde al backend de la aplicación **Algo que Pedir**, desarrollado en **Kotlin** con **Spring Boot**. Implementa una arquitectura REST completa, con controllers, servicios y repositorios, además de un conjunto de tests unitarios, de integración y end-to-end.
 
-```kts
-rootProject.name = "proyecto-base-tp"
-```
+## Tecnologías principales
 
-- Para los badges de build y coverage (las imágenes que ves con el build passing y el % en este README), tenés que reemplazar `tp-worldcapp-2023-gr-xx` por el repositorio correspondiente.
+El backend está construido utilizando:
 
-## El proyecto
+* **Kotlin**
+* **Spring Boot**
+* **Spring Web** para la definición de endpoints REST
+* **Jackson** para serialización y deserialización JSON
+* **JUnit 5** para tests unitarios e integración
+* **Tests E2E** utilizando clientes HTTP reales
+* **JaCoCo** para métricas de cobertura
+* **Gradle (Kotlin DSL)** como herramienta de build
+* **JDK 21**
+* **Bootstrap** (solo para vistas mínimas utilizadas durante debugging o interfaces administrativas simples)
 
-Antes que nada, la idea de este proyecto es que te sirva como base para poder desarrollar el backend en la materia [Algoritmos 3](https://algo3.uqbar-project.org/). Por eso está basado en _Maven_, y el archivo `build.gradle.kts` tiene dependencias a
+---
 
-- Spring Boot
-- JUnit
-- JaCoCo (Java Code Coverage), para que agregues el % de cobertura en el README
-- la versión de Kotlin que estaremos usando
-- además de estar basado en la JDK 21
+## Arquitectura
 
-### Pasos para adaptar tu proyecto de Algo2 a Algo3
+El proyecto implementa una arquitectura organizada en capas:
 
-El proceso más simple para que puedan reutilizar el proyecto de Algo2 en Algo3 es:
+* **Controller**
+  Expone endpoints REST, maneja requests y respuestas HTTP.
 
-- generar una copia de todo el directorio que contiene este proyecto
-- eliminar la carpeta `.git` que está oculta
-- copiar del proyecto de Algo2 las carpetas `src/main/kotlin` y `src/test/kotlin` y la ubican en el mismo lugar en el proyecto de Algo3
-- apuntar al proyecto de github mediante
+* **Service**
+  Contiene la lógica de negocio de la aplicación.
+
+* **Repository**
+  Gestiona los datos en memoria o persistencia (dependiendo de la implementación utilizada durante el TP).
+
+* **Domain**
+  Modelos, entidades y lógica interna asociada.
+
+Esta estructura permite mantener un backend modular, escalable y fácil de testear.
+
+---
+
+## Tests
+
+El proyecto incluye distintos tipos de pruebas:
+
+### Tests unitarios
+
+Validan el comportamiento de clases individuales y lógica de negocio.
+
+### Tests de integración
+
+Ejecutan el contexto de Spring e interactúan con los servicios y repositorios reales para asegurar el correcto funcionamiento del sistema completo.
+
+### Tests end-to-end (E2E)
+
+Simulan el uso real de la API mediante solicitudes HTTP al servidor levantado.
+
+JaCoCo genera automáticamente el reporte de cobertura de código.
+
+---
+
+## Ejecución del proyecto
+
+Para iniciar el servidor:
 
 ```bash
-git remote add origin ...dirección del repo git...
+./gradlew bootRun
 ```
 
-El proyecto tiene un main, en la clase `ProyectoApplication`, que levantará el servidor web en el puerto 9000, tienen que renombrarlo al TP actual. También tenés
+El servidor se inicia en:
 
-- un test de integración de ejemplo (en `src/test/kotlin`)
-# algo-que-pedir-backend
+```
+http://localhost:9000
+```
+
+---
+
+## Estructura del repositorio
+
+Dentro de `src/main/kotlin` encontrarás:
+
+* `controller/` — Controladores REST
+* `service/` — Lógica de negocio
+* `repository/` — Repositorios
+* `domain/` — Entidades y modelos
+* `config/` — Configuraciones de Spring (si aplica)
+
+Dentro de `src/test/kotlin` encontrarás:
+
+* Tests unitarios
+* Tests de integración
+* Tests E2E
+
+---
+
+## Adaptación y uso
+
+Este backend está diseñado para integrarse con los frontends desarrollados para:
+
+* **Usuarios** (React + Vite)
+* **Locales** (Svelte)
+
+Ambas aplicaciones consumen los endpoints expuestos aquí mediante HTTP y JSON.
